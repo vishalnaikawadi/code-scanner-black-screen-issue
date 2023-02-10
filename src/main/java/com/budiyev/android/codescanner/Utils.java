@@ -64,9 +64,9 @@ final class Utils {
 
     @NonNull
     public static Point findSuitableImageSize(@NonNull final Parameters parameters,
-                                              final int frameWidth, final int frameHeight, boolean useDefaultPreviewSize) {
+                                              final int frameWidth, final int frameHeight, PreviewState previewState) {
         final List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-        if (!useDefaultPreviewSize && sizes != null && !sizes.isEmpty()) {
+        if (previewState == PreviewState.USE_CALCULATED && sizes != null && !sizes.isEmpty()) {
             Collections.sort(sizes, new CameraSizeComparator());
             final float frameRatio = (float) frameWidth / (float) frameHeight;
             for (float distortion = MIN_DISTORTION; distortion <= MAX_DISTORTION;

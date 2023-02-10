@@ -54,7 +54,7 @@ import com.google.zxing.BarcodeFormat;
  */
 public final class CodeScanner {
 
-    private boolean useDefaultPreviewSize = false;
+    private PreviewState previewState = PreviewState.USE_CALCULATED;
 
     /**
      * All supported barcode formats
@@ -588,8 +588,10 @@ public final class CodeScanner {
              * If it throws exception as "java.lang.RuntimeException: startPreview failed" it is mainly due to the screen resolution
              * selected for the preview. In that case we will use the default screen resolution.
              */
-            useDefaultPreviewSize = true;
-            initialize();
+            if(previewState == PreviewState.USE_CALCULATED) {
+                previewState = PreviewState.USE_DEFAULT;
+                initialize();
+            }
         }
     }
 
@@ -860,7 +862,7 @@ public final class CodeScanner {
             final boolean portrait = Utils.isPortrait(orientation);
             final Point imageSize =
                     Utils.findSuitableImageSize(parameters, portrait ? mHeight : mWidth,
-                            portrait ? mWidth : mHeight, useDefaultPreviewSize);
+                            portrait ? mWidth : mHeight, previewState);
             final int imageWidth = imageSize.getX();
             final int imageHeight = imageSize.getY();
             parameters.setPreviewSize(imageWidth, imageHeight);
